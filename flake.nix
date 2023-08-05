@@ -62,8 +62,9 @@
         devShells.default = pkgs.mkShell {
           name = "devshell";
           inherit nativeBuildInputs;
-          packages = [
+          packages = with pkgs; [
             config.treefmt.build.wrapper
+            act
           ];
         };
 
