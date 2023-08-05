@@ -13,3 +13,9 @@ pub struct Todo {
 pub struct DataFile {
     data: Vec<Todo>,
 }
+
+impl Todo {
+    fn timestamp() -> String {
+        chrono::Local::now().format("%d.%m, %H:%M").to_string()
+    }
+}
