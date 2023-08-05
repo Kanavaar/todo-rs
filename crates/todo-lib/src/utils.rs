@@ -1,5 +1,6 @@
 use directories;
 use once_cell::sync::Lazy;
+use owo_colors::OwoColorize;
 
 struct Files {
     data_dir: std::path::PathBuf,
@@ -36,6 +37,8 @@ impl Files {
 const PROJECT: Lazy<Files> = Lazy::new(|| Files::new("", "", "rodos"));
 
 pub fn init() {
-    dbg!(PROJECT.data_dir());
-    dbg!(PROJECT.data_file());
+    if !std::fs::metadata(PROJECT.data_dir()).is_ok() {
+        std::fs::create_dir(PROJECT.data_dir()).unwrap();
+        println!("{} {}", "Created Directory:".green().bold(), PROJECT.data_dir().to_str().unwrap());
+    };
 }
