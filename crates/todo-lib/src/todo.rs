@@ -18,4 +18,10 @@ impl Todo {
     fn timestamp() -> String {
         chrono::Local::now().format("%d.%m, %H:%M").to_string()
     }
+
+    fn id() -> usize {
+        use rand::Rng;
+        let id: usize = rand::thread_rng().gen_range(1..=10000);
+        id + rand::thread_rng().gen_range(1..=10000)
+    }
 }
