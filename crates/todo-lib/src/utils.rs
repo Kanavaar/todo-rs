@@ -11,12 +11,17 @@ impl Files {
         let mut data_dir = (match directories::ProjectDirs::from(qualifier, org, name) {
             Some(project) => project,
             None => panic!("Could not get ProjectDirs"),
-        }).data_dir().to_owned();
+        })
+        .data_dir()
+        .to_owned();
 
         let mut data_file = data_dir.as_mut_os_str().to_owned();
         data_file.push("/todos.json");
 
-        Files {data_dir, data_file}
+        Files {
+            data_dir,
+            data_file,
+        }
     }
 
     fn data_dir(&self) -> &std::path::PathBuf {
@@ -28,9 +33,7 @@ impl Files {
     }
 }
 
-const PROJECT: Lazy<Files> = Lazy::new(|| {
-    Files::new("", "", "rodos")
-});
+const PROJECT: Lazy<Files> = Lazy::new(|| Files::new("", "", "rodos"));
 
 pub fn init() {
     dbg!(PROJECT.data_dir());
