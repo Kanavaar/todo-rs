@@ -2,11 +2,24 @@
 name = "todo-rs"
 version = "0.1.0"
 edition = "2021"
+license = "Apache-2.0 OR MIT"
 
 [[bin]]
 name = "rodos"
 path = "src/main.rs"
 
+[workspace]
+members = [
+    ".",
+    "crates/todo-lib",
+]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+license = "Apache-2.0 OR MIT"
+
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+todo = { package = "todo-lib", path = "crates/todo-lib" }
