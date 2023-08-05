@@ -40,7 +40,8 @@ const PROJECT: Lazy<Files> = Lazy::new(|| Files::new("", "", "rodos"));
 pub fn init() {
     if !std::fs::metadata(PROJECT.data_dir()).is_ok() {
         std::fs::create_dir(PROJECT.data_dir()).unwrap();
-        println!("{} {}", "Created Directory:".green().bold(), PROJECT.data_dir().to_str().unwrap().black().italic());
+        println!("{} {}",
+        "Created Directory:".green().bold(), PROJECT.data_dir().to_str().unwrap().black().italic());
     };
 
     if !std::fs::metadata(PROJECT.data_file()).is_ok() {
