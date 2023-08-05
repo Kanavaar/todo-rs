@@ -85,6 +85,72 @@ impl Todo {
             );
         }
     }
+
+    pub fn done(id: String) {
+        let mut todos = crate::utils::get_todos().unwrap();
+
+        let id = match id.parse::<usize>() {
+            Ok(id) => id,
+            Err(_) => {
+                println!(
+                    "{error}{msg}",
+                    error = "Error: ".red().bold(),
+                    msg = "Please provide the id as a positive number".italic()
+                );
+                return;
+            }
+        };
+
+        let exists = todos.iter().any(|todo| todo.id == id);
+        if !exists {
+            println!(
+                "{error}{msg}",
+                error = "Error: ".red().bold(),
+                msg = "Todo not found, please provide a valid id".italic()
+            );
+            return;
+        }
+
+        for todo in &mut todos {
+            if todo.id == id {
+                todo.done = true;
+                todo.modified_at = Todo::timestamp();
+            }
+        }
+
+        crate::utils::save_todos(todos);
+        println!("{msg}", msg = "Marked todo as done".green().bold());
+    }
+
+    pub fn remove(id: String) {
+        let mut todos = crate::utils::get_todos().unwrap();
+
+        let id = match id.parse::<usize>() {
+            Ok(id) => id,
+            Err(_) => {
+                println!(
+                    "{error}{msg}",
+                    error = "Error: ".red().bold(),
+                    msg = "Please provide a positive number".italic()
+                );
+                return;
+            }
+        };
+
+        let exists = todos.iter().any(|todo| todo.id == id);
+        if !exists {
+            println!(
+                "{error}{msg}",
+                error = "Error: ".red().bold(),
+                msg = "Please provide a valid id".italic()
+            );
+            return;
+        }
+
+        todos.retain(|todo| todo.id != id);
+        crate::utils::save_todos(todos);
+        println!("{msg}", msg = "Remove Todo".green().bold());
+    }
 }
 
 impl Default for Todo {
