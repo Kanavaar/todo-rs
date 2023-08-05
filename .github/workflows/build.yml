@@ -26,6 +26,6 @@ jobs:
           github_access_token: ${{ secrets.GITHUB_TOKEN }}
       - name: nix-build
         run: |
-          nix flake test
+          nix flake check
           nix build
           
