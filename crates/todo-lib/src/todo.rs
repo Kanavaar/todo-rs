@@ -55,7 +55,7 @@ impl Todo {
     pub fn list() {
         let todos = crate::utils::get_todos().unwrap();
 
-        if todos.len() < 1 {
+        if todos.len() == 0 {
             println!(
                 "{error}{msg}",
                 error = "Error: ".red().bold(),
