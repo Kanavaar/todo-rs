@@ -1,5 +1,5 @@
-use todo;
+use todo_lib::*;
 
 fn main() {
-    println!("Hello, world!");
+    run();
 }
