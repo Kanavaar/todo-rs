@@ -2,6 +2,7 @@ use directories;
 use once_cell::sync::Lazy;
 use owo_colors::OwoColorize;
 use std::io::Write;
+use serde_json::{self, from_str};
 
 struct Files {
     data_dir: std::path::PathBuf,
@@ -80,4 +81,19 @@ pub fn init() {
             PROJECT.data_file().to_str().unwrap().black().italic()
         );
     }
+}
+
+pub fn get_todos() -> Result<Vec<crate::todo::Todo>, Box<dyn std::error::Error>> {
+    let data = std::fs::read_to_string(PROJECT.data_file()).unwrap();
+    let todos: crate::todo::DataFile = from_str(&data)?;
+
+    Ok(todos.data())
+}
+
+pub fn save_todos(todos: Vec<crate::todo::Todo>) {
+    let data_file = crate::todo::DataFile::from(todos);
+    let json = serde_json::to_string(&data_file).unwrap();
+
+    let mut file = std::fs::File::create(PROJECT.data_file()).unwrap();
+    file.write_all(json.as_bytes()).unwrap();
 }
