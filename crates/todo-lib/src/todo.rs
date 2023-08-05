@@ -25,3 +25,14 @@ impl Todo {
         id + rand::thread_rng().gen_range(1..=10000)
     }
 }
+
+impl DataFile {
+    // Access Functions
+    pub fn data(&self) -> Vec<Todo> {
+        self.data.clone()
+    }
+
+    pub fn from(data: Vec<Todo>) -> DataFile {
+        DataFile{ data }
+    }
+}
