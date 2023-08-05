@@ -1,8 +1,8 @@
 use directories;
 use once_cell::sync::Lazy;
 use owo_colors::OwoColorize;
-use std::io::Write;
 use serde_json::{self, from_str};
+use std::io::Write;
 
 struct Files {
     data_dir: std::path::PathBuf,
