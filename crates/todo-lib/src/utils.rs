@@ -1,6 +1,7 @@
 use directories;
 use once_cell::sync::Lazy;
 use owo_colors::OwoColorize;
+use std::io::Write;
 
 struct Files {
     data_dir: std::path::PathBuf,
@@ -39,6 +40,12 @@ const PROJECT: Lazy<Files> = Lazy::new(|| Files::new("", "", "rodos"));
 pub fn init() {
     if !std::fs::metadata(PROJECT.data_dir()).is_ok() {
         std::fs::create_dir(PROJECT.data_dir()).unwrap();
-        println!("{} {}", "Created Directory:".green().bold(), PROJECT.data_dir().to_str().unwrap());
+        println!("{} {}", "Created Directory:".green().bold(), PROJECT.data_dir().to_str().unwrap().black().italic());
     };
+
+    if !std::fs::metadata(PROJECT.data_file()).is_ok() {
+        let mut file = std::fs::File::create(PROJECT.data_file()).unwrap();
+        file.write_all(b"\"data\":[]").unwrap();
+        println!("{} {}", "Created Data File:".green().bold(), PROJECT.data_file().to_str().unwrap().black().italic());
+    }
 }
