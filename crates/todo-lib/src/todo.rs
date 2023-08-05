@@ -52,7 +52,7 @@ impl Todo {
         );
     }
 
-    fn list() {
+    pub fn list() {
         let todos = crate::utils::get_todos().unwrap();
 
         if todos.len() < 1 {
