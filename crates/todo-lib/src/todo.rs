@@ -77,11 +77,7 @@ impl Todo {
                 todo.title,
                 todo.created_at,
                 todo.modified_at,
-                if todo.done {
-                    "Completed ?"
-                } else {
-                    "No ?"
-                }
+                if todo.done { "Completed ?" } else { "No ?" }
             );
         }
     }
