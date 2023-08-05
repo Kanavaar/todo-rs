@@ -26,8 +26,8 @@ impl Todo {
         id + rand::thread_rng().gen_range(1..=10000)
     }
 
-    fn add(title: String) {
-        if title.len() < 1 {
+    pub fn add(title: String) {
+        if title.len() == 0 {
             println!(
                 "{error}{msg}",
                 error = "Error: ".red().bold(),
