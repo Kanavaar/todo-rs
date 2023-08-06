@@ -27,4 +27,5 @@ license = "Apache-2.0 OR MIT"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+owo-colors = "3.5.0"
 todo-lib = { path = "./crates/todo-lib" }

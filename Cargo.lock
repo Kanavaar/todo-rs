@@ -350,6 +350,7 @@ dependencies = [
 name = "todo-rs"
 version = "0.1.0"
 dependencies = [
+ "owo-colors",
  "todo-lib",
 ]
 

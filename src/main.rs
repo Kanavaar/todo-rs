@@ -1,5 +1,6 @@
-use todo_lib::*;
+mod app;
+mod command;
 
 fn main() {
-    run();
+    app::run();
 }
