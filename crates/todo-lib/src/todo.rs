@@ -1,5 +1,6 @@
 use owo_colors::OwoColorize;
 use serde::{Deserialize, Serialize};
+use std::io::Write;
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct Todo {
@@ -44,7 +45,7 @@ impl Todo {
         };
 
         todos.push(todo);
-        crate::utils::save_todos(todos);
+        crate::todo::Todo::save(todos);
         println!(
             "{msg}{title}",
             msg = "Added Todo: ".green().bold(),
@@ -114,7 +115,7 @@ impl Todo {
             }
         }
 
-        crate::utils::save_todos(todos);
+        crate::todo::Todo::save(todos);
         println!("{msg}", msg = "Marked todo as done".green().bold());
     }
 
@@ -144,7 +145,7 @@ impl Todo {
         }
 
         todos.retain(|todo| todo.id != id);
-        crate::utils::save_todos(todos);
+        crate::todo::Todo::save(todos);
         println!("{msg}", msg = "Remove Todo".green().bold());
     }
 
@@ -153,6 +154,14 @@ impl Todo {
         let todos: crate::todo::DataFile = serde_json::from_str(&data).unwrap();
 
         Ok(todos.data())
+    }
+
+    pub fn save(todos: Vec<crate::todo::Todo>) {
+        let data_file = crate::todo::DataFile::from(todos);
+        let json = serde_json::to_string(&data_file).unwrap();
+
+        let mut file = std::fs::File::create(crate::utils::PROJECT.data_file()).unwrap();
+        file.write_all(json.as_bytes()).unwrap();
     }
 }
 
