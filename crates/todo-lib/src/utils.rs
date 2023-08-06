@@ -3,6 +3,7 @@ use once_cell::sync::Lazy;
 use owo_colors::OwoColorize;
 use std::io::Write;
 
+/// The Files and Directories used for storing the applications data
 pub struct Files {
     data_dir: std::path::PathBuf,
     data_file: std::ffi::OsString,
@@ -26,10 +27,12 @@ impl Files {
         }
     }
 
+    /// The directory used
     pub fn data_dir(&self) -> &std::path::PathBuf {
         &self.data_dir
     }
 
+    /// The File used
     pub fn data_file(&self) -> &std::ffi::OsString {
         &self.data_file
     }
@@ -37,6 +40,7 @@ impl Files {
 
 pub const PROJECT: Lazy<Files> = Lazy::new(|| Files::new("", "", "rodos"));
 
+/// Creates file and directories used for application
 pub fn init() {
     if !std::fs::metadata(PROJECT.data_dir()).is_ok() {
         std::fs::create_dir(PROJECT.data_dir()).unwrap();
