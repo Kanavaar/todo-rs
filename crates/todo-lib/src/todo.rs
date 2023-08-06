@@ -2,6 +2,14 @@ use owo_colors::OwoColorize;
 use serde::{Deserialize, Serialize};
 use std::io::Write;
 
+#[derive(Debug, thiserror::Error)]
+pub enum TodoError {
+    #[error("Could not parse Json")]
+    JsonError(#[from] serde_json::Error),
+    #[error("Could not read from data file")]
+    FileReadError(#[from] std::io::Error),
+}
+
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct Todo {
     created_at: String,
@@ -149,9 +157,9 @@ impl Todo {
         println!("{msg}", msg = "Remove Todo".green().bold());
     }
 
-    pub fn get() -> Result<Vec<crate::todo::Todo>, Box<dyn std::error::Error>> {
-        let data = std::fs::read_to_string(crate::utils::PROJECT.data_file()).unwrap();
-        let todos: crate::todo::DataFile = serde_json::from_str(&data).unwrap();
+    pub fn get() -> Result<Vec<crate::todo::Todo>, TodoError> {
+        let data = std::fs::read_to_string(crate::utils::PROJECT.data_file())?;
+        let todos: crate::todo::DataFile = serde_json::from_str(&data)?;
 
         Ok(todos.data())
     }
