@@ -1,22 +1,21 @@
 {
+  description = "Description for the project";
+
   inputs = {
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     flake-parts.url = "github:hercules-ci/flake-parts";
-    nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
     fenix = {
       url = "github:nix-community/fenix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    crane = {
-      url = "github:ipetkov/crane";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    naersk.url = "github:nix-community/naersk";
     treefmt-nix.url = "github:numtide/treefmt-nix";
   };
 
   outputs = inputs @ {
     flake-parts,
     fenix,
-    crane,
+    naersk,
     treefmt-nix,
     ...
   }:
@@ -24,7 +23,7 @@
       imports = [
         treefmt-nix.flakeModule
       ];
-      systems = ["x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin"];
+      systems = ["x86_64-linux" "aarch64-linux" "aarch64-darwin" "x86_64-darwin"];
       perSystem = {
         config,
         self',
@@ -37,42 +36,32 @@
           dir = ./.;
           sha256 = "sha256-R0F0Risbr74xg9mEYydyebx/z0Wu6HI0/KWwrV30vZo=";
         };
-        crane-lib = (crane.mkLib pkgs).overrideToolchain rust-toolchain;
-        src = crane-lib.cleanCargoSource (crane-lib.path ./.);
-        commonArgs = {
-          inherit src;
+        naersk-lib = naersk.lib.${system}.override {
+          cargo = rust-toolchain;
+          rustc = rust-toolchain;
+        };
+        nativeBuildInputs = with pkgs; [
+          rust-toolchain
+        ];
+        bin = naersk-lib.buildPackage {
+          src = ./.;
+          doCheck = true;
           pname = "rodos";
           version = "0.1.0";
-          buildInputs =
-            [
-            ]
-            ++ pkgs.lib.optionals pkgs.stdenv.isDarwin [
-              pkgs.libiconv
-            ];
-          nativeBuildInputs = [
-            rust-toolchain
-          ];
+          inherit nativeBuildInputs;
         };
-        cargoArtifacts = crane-lib.buildDepsOnly commonArgs;
-        bin = crane-lib.buildPackage (commonArgs
-          // {
-            inherit cargoArtifacts;
-          });
       in {
-        checks = {
-          inherit bin;
-          clippy = crane-lib.cargoClippy (commonArgs
-            // {
-              inherit cargoArtifacts;
-              cargoClippyExtraArgs = "--all-targets -- --deny warnings";
-            });
-        };
+        # Per-system attributes can be defined here. The self' and inputs'
+        # module parameters provide easy access to attributes of the same
+        # system.
+
+        # Equivalent to  inputs'.nixpkgs.legacyPackages.hello;
         packages = {
           default = bin;
         };
         devShells.default = pkgs.mkShell {
           name = "devshell";
-          inherit (commonArgs) nativeBuildInputs buildInputs;
+          inherit nativeBuildInputs;
           packages = with pkgs; [
             config.treefmt.build.wrapper
             tokei
@@ -87,6 +76,9 @@
         };
       };
       flake = {
+        # The usual flake attributes can be defined here, including system-
+        # agnostic ones like nixosModule and system-enumerating ones, although
+        # those are more easily expressed in perSystem.
       };
     };
 }
