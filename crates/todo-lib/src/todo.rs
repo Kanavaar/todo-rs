@@ -28,7 +28,7 @@ impl Todo {
     }
 
     pub fn add(title: String) {
-        if title.len() == 0 {
+        if title.is_empty() {
             println!(
                 "{error}{msg}",
                 error = "Error: ".red().bold(),
@@ -56,7 +56,7 @@ impl Todo {
     pub fn list() {
         let todos = crate::todo::Todo::get().unwrap();
 
-        if todos.len() == 0 {
+        if todos.is_empty() {
             println!(
                 "{error}{msg}",
                 error = "Error: ".red().bold(),
