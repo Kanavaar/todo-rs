@@ -4,7 +4,7 @@ use owo_colors::OwoColorize;
 use serde_json::{self, from_str};
 use std::io::Write;
 
-struct Files {
+pub struct Files {
     data_dir: std::path::PathBuf,
     data_file: std::ffi::OsString,
 }
@@ -27,11 +27,11 @@ impl Files {
         }
     }
 
-    fn data_dir(&self) -> &std::path::PathBuf {
+    pub fn data_dir(&self) -> &std::path::PathBuf {
         &self.data_dir
     }
 
-    fn data_file(&self) -> &std::ffi::OsString {
+    pub fn data_file(&self) -> &std::ffi::OsString {
         &self.data_file
     }
 }
@@ -60,7 +60,7 @@ impl Command {
     }
 }
 
-const PROJECT: Lazy<Files> = Lazy::new(|| Files::new("", "", "rodos"));
+pub const PROJECT: Lazy<Files> = Lazy::new(|| Files::new("", "", "rodos"));
 
 pub fn init() {
     if !std::fs::metadata(PROJECT.data_dir()).is_ok() {
@@ -81,13 +81,6 @@ pub fn init() {
             PROJECT.data_file().to_str().unwrap().black().italic()
         );
     }
-}
-
-pub fn get_todos() -> Result<Vec<crate::todo::Todo>, Box<dyn std::error::Error>> {
-    let data = std::fs::read_to_string(PROJECT.data_file()).unwrap();
-    let todos: crate::todo::DataFile = from_str(&data)?;
-
-    Ok(todos.data())
 }
 
 pub fn save_todos(todos: Vec<crate::todo::Todo>) {

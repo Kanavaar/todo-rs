@@ -37,7 +37,7 @@ impl Todo {
             return;
         }
 
-        let mut todos = crate::utils::get_todos().unwrap();
+        let mut todos = crate::todo::Todo::get().unwrap();
         let todo = Todo {
             title: String::from(&title),
             ..Default::default()
@@ -53,7 +53,7 @@ impl Todo {
     }
 
     pub fn list() {
-        let todos = crate::utils::get_todos().unwrap();
+        let todos = crate::todo::Todo::get().unwrap();
 
         if todos.len() == 0 {
             println!(
@@ -83,7 +83,7 @@ impl Todo {
     }
 
     pub fn done(id: String) {
-        let mut todos = crate::utils::get_todos().unwrap();
+        let mut todos = crate::todo::Todo::get().unwrap();
 
         let id = match id.parse::<usize>() {
             Ok(id) => id,
@@ -119,7 +119,7 @@ impl Todo {
     }
 
     pub fn remove(id: String) {
-        let mut todos = crate::utils::get_todos().unwrap();
+        let mut todos = crate::todo::Todo::get().unwrap();
 
         let id = match id.parse::<usize>() {
             Ok(id) => id,
@@ -146,6 +146,13 @@ impl Todo {
         todos.retain(|todo| todo.id != id);
         crate::utils::save_todos(todos);
         println!("{msg}", msg = "Remove Todo".green().bold());
+    }
+
+    pub fn get() -> Result<Vec<crate::todo::Todo>, Box<dyn std::error::Error>> {
+        let data = std::fs::read_to_string(crate::utils::PROJECT.data_file()).unwrap();
+        let todos: crate::todo::DataFile = serde_json::from_str(&data).unwrap();
+
+        Ok(todos.data())
     }
 }
 
