@@ -42,7 +42,7 @@ pub static PROJECT: Lazy<Files> = Lazy::new(|| Files::new("", "", "rodos"));
 
 /// Creates file and directories used for application
 pub fn init() {
-    if !std::fs::metadata(PROJECT.data_dir()).is_ok() {
+    if std::fs::metadata(PROJECT.data_dir()).is_err() {
         std::fs::create_dir(PROJECT.data_dir()).unwrap();
         println!(
             "{} {}",
@@ -51,7 +51,7 @@ pub fn init() {
         );
     };
 
-    if !std::fs::metadata(PROJECT.data_file()).is_ok() {
+    if std::fs::metadata(PROJECT.data_file()).is_err() {
         let mut file = std::fs::File::create(PROJECT.data_file()).unwrap();
         file.write_all(b"{\"data\":[]}").unwrap();
         println!(
