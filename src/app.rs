@@ -1,6 +1,5 @@
 use crate::command;
 use owo_colors::OwoColorize;
-use todo_lib;
 
 pub fn run() {
     todo_lib::utils::init();
