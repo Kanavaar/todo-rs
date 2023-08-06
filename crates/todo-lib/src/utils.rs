@@ -53,7 +53,7 @@ pub fn init() {
 
     if !std::fs::metadata(PROJECT.data_file()).is_ok() {
         let mut file = std::fs::File::create(PROJECT.data_file()).unwrap();
-        file.write_all(b"\"data\":[]").unwrap();
+        file.write_all(b"{\"data\":[]}").unwrap();
         println!(
             "{} {}",
             "Created Data File:".green().bold(),
