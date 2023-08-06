@@ -64,7 +64,7 @@
           inherit nativeBuildInputs;
           packages = with pkgs; [
             config.treefmt.build.wrapper
-            act
+            tokei
           ];
         };
 
