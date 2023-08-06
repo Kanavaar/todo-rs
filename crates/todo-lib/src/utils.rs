@@ -38,7 +38,7 @@ impl Files {
     }
 }
 
-pub const PROJECT: Lazy<Files> = Lazy::new(|| Files::new("", "", "rodos"));
+pub static PROJECT: Lazy<Files> = Lazy::new(|| Files::new("", "", "rodos"));
 
 /// Creates file and directories used for application
 pub fn init() {
