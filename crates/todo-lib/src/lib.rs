@@ -1,6 +1,2 @@
-mod todo;
-mod utils;
-
-pub fn run() {
-    utils::init();
-}
+pub mod todo;
+pub mod utils;
