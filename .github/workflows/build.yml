@@ -34,9 +34,9 @@ jobs:
       - name: checkout
         uses: actions/checkout@v3
       - name: Install Nix
-        uses: cachix/install-nix-action@v22
-        with:
-          github_access_token: ${{ secrets.GITHUB_TOKEN }}
+        uses: DeterminateSystems/nix-installer-action@v4
+      - name: nix cache
+        uses: DeterminateSystems/magic-nix-cache-action@v2
       - name: nix-build
         run: |
           nix fmt
